@@ -2,6 +2,8 @@ package application;
 
 import java.time.LocalDate;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -12,6 +14,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class Controller {
+	private LoadFiles loadFiles[];
 	
 	@FXML
     private ChoiceBox<String> choiceBox;
@@ -26,7 +29,7 @@ public class Controller {
     public Label firstFileStatus;
 
     @FXML
-    private Button loadFiles;
+    private Button loadFilesButton;
 
     @FXML
     public Label secondFileStatus;
@@ -79,6 +82,27 @@ public class Controller {
         
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 	}
+	
+	public void Load() {
+		ObservableList<PersonData> data = FXCollections.observableArrayList();
+		loadFiles = new LoadFiles[3];
+        for (int i = 0; i < 3; i++) {
+        	if (i == 0) {
+        		loadFiles[i] = new LoadFiles("MOCK_DATA1.csv", data);
+        	}
+        	else if (i == 1) {
+        		loadFiles[i] = new LoadFiles("MOCK_DATA2.csv", data);
+        	}
+        	else {
+        		loadFiles[i] = new LoadFiles("MOCK_DATA3.csv", data);
+        	}
+        }
+        
+
+        for (LoadFiles loadFiles : loadFiles) {
+            loadFiles.start();
+        }
+    }
 	
 
 

@@ -10,7 +10,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
    <children>
       <TableView fx:id="table" layoutY="112.0" prefHeight="288.0" prefWidth="930.0" />
-      <Button fx:id="loadFiles" layoutX="7.0" layoutY="14.0" mnemonicParsing="false" text="Load all files" />
+      <Button fx:id="loadFilesButton" layoutX="7.0" layoutY="14.0" mnemonicParsing="false" onAction="#Load" text="Load all files" />
       <Label fx:id="firstFileStatus" layoutX="92.0" layoutY="18.0" text="first file status:" />
       <Label fx:id="secondFileStatus" layoutX="83.0" layoutY="52.0" text="second file status:" />
       <Label fx:id="thirdFileStatus" layoutX="89.0" layoutY="86.0" text="third file status:" />

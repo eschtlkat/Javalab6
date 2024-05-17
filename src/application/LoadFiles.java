@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 
 
@@ -42,9 +43,9 @@ public class LoadFiles extends Thread {
 					personData.setDomain(row[6]);
 			        LocalDate birthDay = LocalDate.parse(row[7]);
 			        personData.setBirthDate(birthDay);
-			        data.add(personData);
+			        Platform.runLater(() -> data.add(personData));
 
-			        Thread.sleep(3000);
+			        Thread.sleep(1000);
 					
 				} catch (InterruptedException e) {
 					System.out.println("Thread was interrupted");
