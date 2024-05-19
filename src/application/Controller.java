@@ -1,6 +1,8 @@
 package application;
 
 import java.time.LocalDate;
+import java.util.function.Predicate;
+
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -15,7 +17,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class Controller {
-	private LoadFiles loadFiles[];
 	ObservableList<PersonData> data = FXCollections.observableArrayList();
 	
 	@FXML
@@ -44,6 +45,9 @@ public class Controller {
 
     @FXML
     public Label thirdFileStatus;
+    
+    LocalDate dateFrom;
+    LocalDate dateTo;
     
 	@FXML
 	void initialize () {
@@ -83,7 +87,7 @@ public class Controller {
         table.getColumns().add(birthDate);
         
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-        table.setItems(data);
+        Platform.runLater(() -> table.setItems(data));
 	}
 	
 	@FXML
@@ -93,27 +97,51 @@ public class Controller {
 		Platform.runLater(() -> secondFileStatus.setText("Second file status: Loading."));
 		Platform.runLater(() -> thirdFileStatus.setText("Third file status: Loading."));
 		
-		loadFiles = new LoadFiles[3];
-        for (int i = 0; i < 3; i++) {
-        	if (i == 0) {
-        		loadFiles[i] = new LoadFiles("MOCK_DATA1.csv", data);
-        	}
-        	else if (i == 1) {
-        		loadFiles[i] = new LoadFiles("MOCK_DATA2.csv", data);
-        	}
-        	else {
-        		loadFiles[i] = new LoadFiles("MOCK_DATA3.csv", data);
-        	}
-        }
-        
+		
+		Thread thread1 = new LoadFiles("MOCK_DATA1.csv", data, this);
+        thread1.start();
+        Thread thread2 = new LoadFiles("MOCK_DATA2.csv", data, this);
+        thread2.start();
+        Thread thread3 = new LoadFiles("MOCK_DATA3.csv", data, this);
+        thread3.start();
 
-        for (LoadFiles loadFiles : loadFiles) {
-            loadFiles.start();
-        }
-        
-        
+
     }
 	
+	
+    Predicate<PersonData> dateFilter = personData -> {
+        if (dateFrom == null && dateTo == null) {
+        	System.out.println("NULL");
+            return true;
+        }
 
 
+        LocalDate personBirthDate = personData.getBirthDate();
+        if(dateFrom != null && dateTo != null) {
+        	System.out.println("Not Null");
+            return personBirthDate.isAfter(dateFrom) && personBirthDate.isBefore(dateTo);
+        }
+        else if (dateFrom != null) {
+        	System.out.println("Not Null");
+            return personBirthDate.isAfter(dateFrom);
+        }
+        else {
+        	System.out.println("Not Null");
+            return personBirthDate.isBefore(dateTo);
+        }
+
+    };
+    
+    public void Sort() {
+    	dateFrom = datePickerFrom.getValue();
+    	dateTo = datePickerTo.getValue();
+    }
+	
+	
+	
+	
+	
+	
+	
+	
 }

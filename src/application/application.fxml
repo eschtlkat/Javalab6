@@ -17,6 +17,6 @@
       <DatePicker fx:id="datePickerFrom" layoutX="497.0" layoutY="14.0" />
       <DatePicker fx:id="datePickerTo" layoutX="696.0" layoutY="14.0" />
       <ChoiceBox fx:id="choiceBox" layoutX="610.0" layoutY="60.0" prefWidth="150.0" />
-      <Button fx:id="submit" layoutX="852.0" layoutY="73.0" mnemonicParsing="false" text="Sort" />
+      <Button fx:id="submit" layoutX="852.0" layoutY="73.0" mnemonicParsing="false" onAction="#Sort" text="Sort" />
    </children>
 </AnchorPane>

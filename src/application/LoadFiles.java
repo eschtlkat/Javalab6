@@ -14,14 +14,16 @@ import javafx.collections.ObservableList;
 
 public class LoadFiles extends Thread {
 	
+	public Controller controller;
 	private final String fileName;
 	private int numOfLines = 0;
 	private int currentLine = 0;
     private ObservableList<PersonData> data;
     
-    public LoadFiles(String fileName, ObservableList<PersonData> data) {
+    public LoadFiles(String fileName, ObservableList<PersonData> data, Controller controller) {
 		this.fileName = fileName;
 		this.data = data;
+		this.controller = controller;
     }
     
     @Override
@@ -49,7 +51,7 @@ public class LoadFiles extends Thread {
 			        Platform.runLater(() -> data.add(personData));
 			        currentLine++;
 			        numOfLines++;
-			        Thread.sleep(20);
+			        Thread.sleep(10);
 					
 				} catch (InterruptedException e) {
 					System.out.println("Thread was interrupted");
@@ -59,13 +61,23 @@ public class LoadFiles extends Thread {
 		        }
 			}
 			reader.close();
+			Platform.runLater(() -> controller.table.setItems(data.filtered(controller.dateFilter)));
+			if (fileName == "MOCK_DATA1.csv") {
+				Platform.runLater(() -> controller.firstFileStatus.setText("First file status: Completed."));
+			}
+			else if (fileName == "MOCK_DATA2.csv") {
+				Platform.runLater(() -> controller.secondFileStatus.setText("Second file status: Completed."));
+			}
+			else if (fileName == "MOCK_DATA3.csv") {
+				Platform.runLater(() -> controller.thirdFileStatus.setText("Third file status: Completed."));
+			}
+			
 		} catch (FileNotFoundException e) {
 			System.out.println("Failed to read a file");
 			e.printStackTrace();
 		} catch (IOException e) {
 			System.out.println("Failed to read a line number " + numOfLines);
 		}
-    	System.out.println(numOfLines + " lines printed.");
     }
     
 }
