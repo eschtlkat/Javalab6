@@ -7,9 +7,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 
 
 public class LoadFiles extends Thread {
@@ -32,7 +34,7 @@ public class LoadFiles extends Thread {
     	try {
 			BufferedReader reader = new BufferedReader(new FileReader(fileName));
 			numOfLines++;
-			String onePersonInfo = reader.readLine(); // nuskaityti pirma eilute, nes nereikalinga
+			String onePersonInfo = reader.readLine(); 
 			currentLine = 1;
 			while ((onePersonInfo = reader.readLine()) != null) {
 				try {
@@ -61,7 +63,8 @@ public class LoadFiles extends Thread {
 		        }
 			}
 			reader.close();
-			Platform.runLater(() -> controller.table.setItems(data.filtered(controller.dateFilter)));
+			Platform.runLater(() -> controller.table.setItems(data));
+			
 			if (fileName == "MOCK_DATA1.csv") {
 				Platform.runLater(() -> controller.firstFileStatus.setText("First file status: Completed."));
 			}

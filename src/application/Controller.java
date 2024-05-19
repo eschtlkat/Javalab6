@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -109,14 +110,14 @@ public class Controller {
     }
 	
 	
-    Predicate<PersonData> dateFilter = personData -> {
+    Predicate<PersonData> dateFilter = person -> {
         if (dateFrom == null && dateTo == null) {
         	System.out.println("NULL");
             return true;
         }
 
 
-        LocalDate personBirthDate = personData.getBirthDate();
+        LocalDate personBirthDate = person.getBirthDate();
         if(dateFrom != null && dateTo != null) {
         	System.out.println("Not Null");
             return personBirthDate.isAfter(dateFrom) && personBirthDate.isBefore(dateTo);
@@ -135,6 +136,9 @@ public class Controller {
     public void Sort() {
     	dateFrom = datePickerFrom.getValue();
     	dateTo = datePickerTo.getValue();
+    	FilteredList<PersonData> filteredList = new FilteredList(data);
+		filteredList.setPredicate(dateFilter);
+		Platform.runLater(() -> table.setItems(filteredList));
     }
 	
 	
