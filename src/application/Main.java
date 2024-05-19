@@ -1,7 +1,5 @@
 package application;
 
-import application.Controller;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -24,7 +22,6 @@ public class Main extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			this.controller = new Controller();
-			controller.Load();
 			
 		} catch(Exception e) {
 			e.printStackTrace();

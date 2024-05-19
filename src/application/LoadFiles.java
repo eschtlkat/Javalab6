@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -15,6 +16,7 @@ public class LoadFiles extends Thread {
 	
 	private final String fileName;
 	private int numOfLines = 0;
+	private int currentLine = 0;
     private ObservableList<PersonData> data;
     
     public LoadFiles(String fileName, ObservableList<PersonData> data) {
@@ -29,6 +31,7 @@ public class LoadFiles extends Thread {
 			BufferedReader reader = new BufferedReader(new FileReader(fileName));
 			numOfLines++;
 			String onePersonInfo = reader.readLine(); // nuskaityti pirma eilute, nes nereikalinga
+			currentLine = 1;
 			while ((onePersonInfo = reader.readLine()) != null) {
 				try {
 					PersonData personData = new PersonData();
@@ -44,13 +47,16 @@ public class LoadFiles extends Thread {
 			        LocalDate birthDay = LocalDate.parse(row[7]);
 			        personData.setBirthDate(birthDay);
 			        Platform.runLater(() -> data.add(personData));
-
-			        Thread.sleep(1000);
+			        currentLine++;
+			        numOfLines++;
+			        Thread.sleep(20);
 					
 				} catch (InterruptedException e) {
 					System.out.println("Thread was interrupted");
 					e.printStackTrace();
-				} 
+				} catch (DateTimeParseException e) {
+		            System.out.println("Invalid date format for line " + currentLine + " in file " + fileName);
+		        }
 			}
 			reader.close();
 		} catch (FileNotFoundException e) {
@@ -59,6 +65,7 @@ public class LoadFiles extends Thread {
 		} catch (IOException e) {
 			System.out.println("Failed to read a line number " + numOfLines);
 		}
+    	System.out.println(numOfLines + " lines printed.");
     }
     
 }

@@ -2,6 +2,7 @@ package application;
 
 import java.time.LocalDate;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class Controller {
 	private LoadFiles loadFiles[];
+	ObservableList<PersonData> data = FXCollections.observableArrayList();
 	
 	@FXML
     private ChoiceBox<String> choiceBox;
@@ -81,10 +83,16 @@ public class Controller {
         table.getColumns().add(birthDate);
         
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+        table.setItems(data);
 	}
 	
+	@FXML
 	public void Load() {
-		ObservableList<PersonData> data = FXCollections.observableArrayList();
+		
+		Platform.runLater(() -> firstFileStatus.setText("First file status: Loading."));
+		Platform.runLater(() -> secondFileStatus.setText("Second file status: Loading."));
+		Platform.runLater(() -> thirdFileStatus.setText("Third file status: Loading."));
+		
 		loadFiles = new LoadFiles[3];
         for (int i = 0; i < 3; i++) {
         	if (i == 0) {
@@ -102,6 +110,8 @@ public class Controller {
         for (LoadFiles loadFiles : loadFiles) {
             loadFiles.start();
         }
+        
+        
     }
 	
 
