@@ -53,7 +53,7 @@ public class LoadFiles extends Thread {
 			        Platform.runLater(() -> data.add(personData));
 			        currentLine++;
 			        numOfLines++;
-			        Thread.sleep(10);
+			        Thread.sleep(1);
 					
 				} catch (InterruptedException e) {
 					System.out.println("Thread was interrupted");

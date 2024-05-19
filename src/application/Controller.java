@@ -2,7 +2,7 @@ package application;
 
 import java.time.LocalDate;
 import java.util.function.Predicate;
-
+import java.util.stream.Collectors;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -19,6 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class Controller {
 	ObservableList<PersonData> data = FXCollections.observableArrayList();
+	ObservableList<PersonData> filteredData = FXCollections.observableArrayList();
 	
 	@FXML
     private ChoiceBox<String> choiceBox;
@@ -49,6 +50,7 @@ public class Controller {
     
     LocalDate dateFrom;
     LocalDate dateTo;
+    private String choiceForFiltering;
     
 	@FXML
 	void initialize () {
@@ -112,33 +114,86 @@ public class Controller {
 	
     Predicate<PersonData> dateFilter = person -> {
         if (dateFrom == null && dateTo == null) {
-        	System.out.println("NULL");
             return true;
         }
 
 
         LocalDate personBirthDate = person.getBirthDate();
         if(dateFrom != null && dateTo != null) {
-        	System.out.println("Not Null");
             return personBirthDate.isAfter(dateFrom) && personBirthDate.isBefore(dateTo);
         }
         else if (dateFrom != null) {
-        	System.out.println("Not Null");
             return personBirthDate.isAfter(dateFrom);
         }
         else {
-        	System.out.println("Not Null");
             return personBirthDate.isBefore(dateTo);
         }
 
     };
     
     public void Sort() {
+    	choiceForFiltering = choiceBox.getValue();
+    	Filtering();
+    	
     	dateFrom = datePickerFrom.getValue();
     	dateTo = datePickerTo.getValue();
-    	FilteredList<PersonData> filteredList = new FilteredList(data);
+    	FilteredList<PersonData> filteredList = new FilteredList(filteredData);
 		filteredList.setPredicate(dateFilter);
 		Platform.runLater(() -> table.setItems(filteredList));
+		
+		
+    }
+    
+    public void Filtering () {
+    	if (choiceForFiltering == "ID ascending") {
+    		filteredData = data.stream().sorted((a, b) -> a.getId() - b.getId()).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    		
+    	} else if (choiceForFiltering == "ID descending") {
+    		filteredData = data.stream().sorted((a, b) -> b.getId() - a.getId()).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    		
+    	} else if (choiceForFiltering == "First Name ascending") {
+    		filteredData = data.stream().sorted((a, b) -> a.getFirstName().compareTo(b.getFirstName())).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    		
+    	} else if (choiceForFiltering == "First Name descending") {
+    		filteredData = data.stream().sorted((a, b) -> b.getFirstName().compareTo(a.getFirstName())).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    		
+    	} else if (choiceForFiltering == "Last Name ascending") {
+    		filteredData = data.stream().sorted((a, b) -> a.getLastName().compareTo(b.getLastName())).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    		
+    	} else if (choiceForFiltering == "Last Name descending") {
+    		filteredData = data.stream().sorted((a, b) -> b.getLastName().compareTo(a.getLastName())).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    		
+    	} else if (choiceForFiltering == "Email ascending") {
+    		filteredData = data.stream().sorted((a, b) -> a.getEmail().compareTo(b.getEmail())).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    		
+    	} else if (choiceForFiltering == "Email descending") {
+    		filteredData = data.stream().sorted((a, b) -> b.getEmail().compareTo(a.getEmail())).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    		
+    	} else if (choiceForFiltering == "Gender ascending") {
+    		filteredData = data.stream().sorted((a, b) -> a.getGender().compareTo(b.getGender())).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    		
+    	} else if (choiceForFiltering == "Gender descending") {
+    		filteredData = data.stream().sorted((a, b) -> b.getGender().compareTo(a.getGender())).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    		
+    	} else if (choiceForFiltering == "Country ascending") {
+    		filteredData = data.stream().sorted((a, b) -> a.getCountry().compareTo(b.getCountry())).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    		
+    	} else if (choiceForFiltering == "Country descending") {
+    		filteredData = data.stream().sorted((a, b) -> b.getCountry().compareTo(a.getCountry())).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    		
+    	} else if (choiceForFiltering == "Domain Name ascending") {
+    		filteredData = data.stream().sorted((a, b) -> a.getDomain().compareTo(b.getDomain())).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    		
+    	} else if (choiceForFiltering == "Domain Name descending") {
+    		filteredData = data.stream().sorted((a, b) -> b.getDomain().compareTo(a.getDomain())).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    		
+    	} else if (choiceForFiltering == "Birth Date ascending") {
+    		filteredData = data.stream().sorted((a, b) -> a.getBirthDate().compareTo(b.getBirthDate())).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    		
+    	} else if (choiceForFiltering == "Birth Date descending") {
+    		filteredData = data.stream().sorted((a, b) -> b.getBirthDate().compareTo(a.getBirthDate())).collect(Collectors.toCollection(FXCollections::observableArrayList));
+    		
+    	}
     }
 	
 	
